@@ -1,0 +1,165 @@
+﻿<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>monitord desktop</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar glass-panel">
+      <div class="brand-wrap">
+        <div class="brand">
+          <img class="brand-logo" src="./assets/main-logo.png" alt="monitord logo" />
+        </div>
+        <div class="brand-sub">Мониторинг железа и управление агентом</div>
+      </div>
+
+      <nav class="nav-tree">
+        <div class="nav-group">Общее</div>
+        <button class="nav-item active" data-tab="overview"><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M4 13h6v7H4zM14 4h6v16h-6zM4 4h6v7H4z"/></svg></span>Обзор</button>
+        <button class="nav-item" data-tab="sensors"><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M10.4 2.8 9 5.6a7.9 7.9 0 0 0-1.7 1L4.3 5.8 2.8 8.3l2.6 2a7.9 7.9 0 0 0 0 3.4l-2.6 2 1.5 2.5 3-0.8a7.9 7.9 0 0 0 1.7 1l1.4 2.8h3.2l1.4-2.8a7.9 7.9 0 0 0 1.7-1l3 0.8 1.5-2.5-2.6-2a7.9 7.9 0 0 0 0-3.4l2.6-2-1.5-2.5-3 0.8a7.9 7.9 0 0 0-1.7-1L13.6 2.8zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg></span>Сенсоры</button>
+
+        <div class="nav-group">Управление</div>
+        <button class="nav-item" data-tab="agent"><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2v1h2.5A2.5 2.5 0 0 1 19 7.5V16h1a1 1 0 1 1 0 2h-1v1.5a2.5 2.5 0 0 1-2.5 2.5H7.5A2.5 2.5 0 0 1 5 19.5V18H4a1 1 0 1 1 0-2h1V7.5A2.5 2.5 0 0 1 7.5 5H10V4a2 2 0 0 1 2-2zm5 7H7v10a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5zM10 12a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm4 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg></span>Агент</button>
+        <button class="nav-item" data-tab="config"><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M19.4 13a7.8 7.8 0 0 0 .1-2l2-1.5-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L15 3h-4l-.4 3a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.5a7.8 7.8 0 0 0 .1 2l-2 1.5 2 3.4 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 3h4l.4-3a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.4zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg></span>Настройки</button>
+      </nav>
+
+      <div class="sidebar-cta">
+        <div class="cta-title">Monitoring Core</div>
+        <div class="cta-text">Единый центр: состояние железа, сеть, бот, пороги.</div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar glass-panel">
+        <div class="welcome">
+          <div id="pageTitle" class="welcome-title">Панель мониторинга</div>
+          <div id="statusLine" class="status">Ожидание данных...</div>
+        </div>
+        <div class="topbar-actions">
+          <div class="theme-switch" aria-label="Тема интерфейса">
+            <button id="themeGraphiteBtn" class="theme-btn" type="button">Graphite</button>
+            <button id="themeNeonBtn" class="theme-btn" type="button">Neon</button>
+          </div>
+          <button id="refreshBtn"><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M12 5a7 7 0 1 1-6.3 10h2.2A5 5 0 1 0 12 7c-1.3 0-2.6.5-3.5 1.4L11 11H4V4l2.1 2.1A8.9 8.9 0 0 1 12 5z"/></svg></span>Обновить</button>
+        </div>
+      </header>
+
+      <section id="tab-overview" class="tab active">
+        <div class="overview-grid">
+          <div class="overview-main">
+            <div class="cards" id="overviewCards"></div>
+
+            <div class="panel glass-panel speedtest-panel" id="overviewSpeedtest"></div>
+
+            <div class="panel glass-panel trend-panel" id="trendPanel">
+              <div class="panel-head">
+                <h3><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M3 19h18v2H3zM5 16l4-4 3 2 5-6 2 1-6.2 7.4L9 14l-2.6 2.6z"/></svg></span>Сводный тренд нагрузки</h3>
+                <span class="chip">Онлайн</span>
+              </div>
+              <canvas id="overviewTrend" class="trend-canvas" height="180"></canvas>
+            </div>
+
+            <div class="split">
+              <div class="panel glass-panel">
+                <h3><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M9 2h6v3h3v3h3v8h-3v3h-3v3H9v-3H6v-3H3V8h3V5h3zm-1 5v10h8V7z"/></svg></span>Информация о железе</h3>
+                <div id="hardwareInfo"></div>
+              </div>
+              <div class="panel glass-panel">
+                <h3><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M12 2s3 2.5 3 5.5c0 1.7-.9 3-2 4 2.1-.4 5 1.2 5 5 0 3.1-2.7 5.5-6 5.5s-6-2.4-6-5.5c0-3.8 2.9-5.4 5-5-1.1-1-2-2.3-2-4C9 4.5 12 2 12 2z"/></svg></span>Горячие точки</h3>
+                <div id="hotspots"></div>
+              </div>
+            </div>
+
+            <div class="panel glass-panel" id="overviewPanel"></div>
+          </div>
+
+          <aside class="overview-side">
+            <div class="panel glass-panel risk-card" id="riskCard">
+              <div class="panel-head">
+                <h3><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M12 2 2 6v6c0 5.5 3.8 10.6 10 12 6.2-1.4 10-6.5 10-12V6zm0 4.2 6 2.4V12c0 4.2-2.7 8-6 9.5-3.3-1.5-6-5.3-6-9.5V8.6z"/></svg></span>Индекс риска</h3>
+              </div>
+              <div class="score-wrap">
+                <div id="riskGauge" class="score-ring"></div>
+                <div class="score-meta">
+                  <div class="score-label">Состояние системы</div>
+                  <div id="riskValue" class="score-value">0</div>
+                  <div id="riskBadge" class="score-badge">Нет данных</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel glass-panel mini-list" id="miniThreats">
+              <h3><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M12 2 2 22h20zm0 6 5.2 9H6.8z"/></svg></span>Топ угрозы по устройствам</h3>
+              <div id="miniThreatRows"></div>
+            </div>
+
+            <div class="panel glass-panel mini-list" id="miniNetwork">
+              <h3><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M12 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7-2a9.9 9.9 0 0 1 14 0l1.4-1.4a11.9 11.9 0 0 0-16.8 0zM2 13a14 14 0 0 1 20 0l-1.4 1.4a12 12 0 0 0-17.2 0z"/></svg></span>Активные интерфейсы</h3>
+              <div id="miniNetworkRows"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="tab-sensors" class="tab">
+        <div class="cards" id="sensorQuick"></div>
+        <div class="panel glass-panel">
+          <div class="panel-head">
+            <h3><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M11 2a5 5 0 0 1 5 5v6.6a4.5 4.5 0 1 1-6 0V7a1 1 0 1 1 2 0v7.5l-.5.3A2.5 2.5 0 1 0 14 17V7a3 3 0 1 0-6 0v7a1 1 0 1 1-2 0V7a5 5 0 0 1 5-5z"/></svg></span>Сенсоры</h3>
+            <div class="sensor-mode">
+              <button id="sensorModeBeginner" class="mode-btn active" type="button">Новичок</button>
+              <button id="sensorModePro" class="mode-btn" type="button">Профи</button>
+            </div>
+          </div>
+
+          <div class="sensor-controls">
+            <input id="sensorFilter" type="text" placeholder="Фильтр: тип, имя, устройство, id" />
+            <div id="sensorTypeFilter" class="type-pills" aria-label="Фильтр типа сенсора"></div>
+          </div>
+          <div id="sensorMeta" class="status"></div>
+          <div id="sensorTable"></div>
+        </div>
+      </section>
+
+      <section id="tab-agent" class="tab">
+        <div class="panel glass-panel form-grid">
+          <div class="status">Сервис мониторинга запускается автоматически при старте приложения.</div>
+          <div class="actions">
+            <button id="restartAgentBtn"><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 1-7.4 11h2.2A6 6 0 1 0 12 6c-1.7 0-3.2.7-4.2 1.8L10 10H4V4l2.3 2.3A9.9 9.9 0 0 1 12 4z"/></svg></span>Перезапустить сервис</button>
+            <button id="toggleBotBtn"><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M9.5 12 15 8.5V15zM12 2C6.5 2 2 6.2 2 11.5c0 3 1.5 5.7 4 7.4V22l3.2-1.8c.9.2 1.8.3 2.8.3 5.5 0 10-4.2 10-9.5S17.5 2 12 2z"/></svg></span>Включить Telegram-бота</button>
+          </div>
+          <div id="agentStatus" class="status"></div>
+        </div>
+      </section>
+
+      <section id="tab-config" class="tab">
+        <div class="panel glass-panel form-grid">
+          <label>Адрес сервиса (listen)</label><input id="cfgListen" type="text" />
+          <label>Интервал сбора, сек</label><input id="cfgInterval" type="number" min="1" />
+          <label class="row"><input id="cfgTelegramEnabled" type="checkbox" /> Включать Telegram при обычном CLI-запуске</label>
+          <label>Имя переменной окружения с токеном</label><input id="cfgTokenEnv" type="text" />
+          <label>Токен (опционально)</label><input id="cfgToken" type="text" />
+          <label>Разрешённые chat ids (через запятую)</label><input id="cfgAllowedIds" type="text" />
+          <label>Публичный URL (опционально)</label><input id="cfgPublicUrl" type="text" />
+          <h3><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5.1 3.4 9.8 9 11 5.6-1.2 9-5.9 9-11V6zm0 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm1.2 10h-2.4v-2h2.4z"/></svg></span>Пороги алертов</h3>
+          <label>CPU нагрузка, %</label><input id="cfgCpuLoad" type="number" step="0.1" />
+          <label>CPU температура, C</label><input id="cfgCpuTemp" type="number" step="0.1" />
+          <label>GPU нагрузка, %</label><input id="cfgGpuLoad" type="number" step="0.1" />
+          <label>GPU температура, C</label><input id="cfgGpuTemp" type="number" step="0.1" />
+          <label>RAM использование, %</label><input id="cfgRam" type="number" step="0.1" />
+          <label>Disk использование, %</label><input id="cfgDisk" type="number" step="0.1" />
+          <div class="actions">
+            <button id="loadCfgBtn"><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M12 3 4 9h3v8h10V9h3zM5 19h14v2H5z"/></svg></span>Загрузить настройки</button>
+            <button id="saveCfgBtn"><span class="ui-icon"><svg viewBox="0 0 24 24"><path d="M5 3h12l2 2v16H5zm2 2v4h8V5zm0 12h10V11H7z"/></svg></span>Сохранить настройки</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>

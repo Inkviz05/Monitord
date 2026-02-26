@@ -1,0 +1,118 @@
+{
+  "name": "monitord-electron",
+  "version": "0.1.0",
+  "private": true,
+  "author": "Inkviz05",
+  "description": "Desktop UI for monitord",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:backend": "cargo build --release --target-dir ../build_target",
+    "build:backend:win": "cargo build --release --target-dir ../build_target",
+    "build:backend:linux": "cargo build --release --target-dir ../build_target",
+    "build:backend:mac": "cargo build --release --target-dir ../build_target",
+    "pack:win": "npm run build:backend:win && electron-builder --win nsis --x64",
+    "pack:win:portable": "npm run build:backend:win && electron-builder --win portable --x64",
+    "pack:dir": "npm run build:backend:win && electron-builder --win dir --x64",
+    "pack:linux": "npm run build:backend:linux && electron-builder --linux AppImage deb --x64",
+    "pack:mac": "npm run build:backend:mac && electron-builder --mac dmg zip --x64"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "yaml": "^2.6.0"
+  },
+  "build": {
+    "appId": "com.monitord.desktop",
+    "productName": "monitord desktop",
+    "icon": "assets/icons/app.ico",
+    "npmRebuild": false,
+    "buildDependenciesFromSource": false,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      {
+        "from": ".",
+        "to": ".",
+        "filter": [
+          "main.js",
+          "preload.js",
+          "package.json"
+        ]
+      },
+      {
+        "from": "src",
+        "to": "src",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "extraResources": [
+      {
+        "from": "../config.yaml.example",
+        "to": "config.yaml.example"
+      },
+      {
+        "from": "assets/icons",
+        "to": "icons"
+      }
+    ],
+    "win": {
+      "icon": "assets/icons/app.ico",
+      "signAndEditExecutable": false,
+      "extraResources": [
+        {
+          "from": "../build_target/release/monitord.exe",
+          "to": "bin/monitord.exe"
+        }
+      ],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "extraResources": [
+        {
+          "from": "../build_target/release/monitord",
+          "to": "bin/monitord"
+        }
+      ],
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "mac": {
+      "extraResources": [
+        {
+          "from": "../build_target/release/monitord",
+          "to": "bin/monitord"
+        }
+      ],
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.utilities"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icons/app.ico",
+      "uninstallerIcon": "assets/icons/app.ico",
+      "installerHeaderIcon": "assets/icons/app.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

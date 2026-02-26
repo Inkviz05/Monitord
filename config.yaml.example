@@ -1,0 +1,32 @@
+﻿listen: "0.0.0.0:9108"
+interval_secs: 5
+http_checks:
+  - name: "my-api"
+    url: "https://example.com/health"
+    timeout_ms: 1500
+    expected_status: 200
+tcp_checks:
+  - name: "postgres"
+    host: "127.0.0.1"
+    port: 5432
+    timeout_ms: 500
+telegram:
+  enabled: false
+  bot_token_env: "TELEGRAM_BOT_TOKEN"
+  bot_token: ""
+  allowed_chat_ids: []
+  rate_limit_per_minute: 30
+  public_base_url: "http://127.0.0.1:9108"
+  alerts:
+    enabled_by_default: true
+    repeat_interval_secs: 1800
+    fail_threshold: 3
+    recovery_notify: true
+    resource_alerts_enabled: true
+    cpu_load_threshold_percent: 92.0
+    ram_usage_threshold_percent: 92.0
+    disk_usage_threshold_percent: 95.0
+    gpu_load_threshold_percent: 92.0
+    gpu_temp_threshold_celsius: 75.0
+    cpu_temp_threshold_celsius: 85.0
+    resource_alert_cooldown_secs: 10

@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "pack:win": "npm --prefix desktop-electron run pack:win",
+    "pack:win:portable": "npm --prefix desktop-electron run pack:win:portable",
+    "pack:dir": "npm --prefix desktop-electron run pack:dir",
+    "pack:linux": "npm --prefix desktop-electron run pack:linux",
+    "pack:mac": "npm --prefix desktop-electron run pack:mac"
+  },
+  "dependencies": {
+    "cargo": "^0.8.0"
+  }
+}
