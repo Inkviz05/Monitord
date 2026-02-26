@@ -135,6 +135,25 @@ npm run pack:mac
 
 Если файла нет, он создается автоматически из `config.yaml.example`.
 
+## CI: Автосборка GitHub Actions
+
+Добавлен workflow: `.github/workflows/build-desktop.yml`.
+
+Он запускается:
+- вручную (`workflow_dispatch`)
+- при push в `main`
+- при `pull_request`
+
+Что собирает:
+- `windows-latest` -> `pack:win`
+- `ubuntu-latest` -> `pack:linux`
+- `macos-latest` -> `pack:mac`
+
+Готовые файлы публикуются в `Actions -> Artifacts`:
+- Windows: `.exe`, `.blockmap`
+- Linux: `.AppImage`, `.deb`
+- macOS: `.dmg`, `.zip`
+
 ## Prometheus
 
 Пример `scrape_configs`:

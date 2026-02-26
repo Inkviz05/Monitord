@@ -1,0 +1,63 @@
+name: Build Desktop
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    name: ${{ matrix.os }} build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            npm_script: pack:win
+            artifact_name: monitord-desktop-windows
+            artifact_path: |
+              desktop-electron/dist/*.exe
+              desktop-electron/dist/*.blockmap
+          - os: ubuntu-latest
+            npm_script: pack:linux
+            artifact_name: monitord-desktop-linux
+            artifact_path: |
+              desktop-electron/dist/*.AppImage
+              desktop-electron/dist/*.deb
+          - os: macos-latest
+            npm_script: pack:mac
+            artifact_name: monitord-desktop-macos
+            artifact_path: |
+              desktop-electron/dist/*.dmg
+              desktop-electron/dist/*.zip
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: desktop-electron/package-lock.json
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install desktop dependencies
+        working-directory: desktop-electron
+        run: npm ci
+
+      - name: Build package
+        run: npm --prefix desktop-electron run ${{ matrix.npm_script }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_path }}
+          if-no-files-found: error
