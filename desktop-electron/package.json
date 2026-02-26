@@ -2,7 +2,11 @@
   "name": "monitord-electron",
   "version": "0.1.0",
   "private": true,
-  "author": "Inkviz05",
+  "author": {
+    "name": "Inkviz05",
+    "email": "inkviz05@users.noreply.github.com"
+  },
+  "homepage": "https://github.com/Inkviz05/Monitord",
   "description": "Desktop UI for monitord",
   "main": "main.js",
   "scripts": {
@@ -81,6 +85,7 @@
     },
     "linux": {
       "icon": "assets/icons/app-512.png",
+      "maintainer": "Inkviz05 <inkviz05@users.noreply.github.com>",
       "extraResources": [
         {
           "from": "../build_target/release/monitord",
