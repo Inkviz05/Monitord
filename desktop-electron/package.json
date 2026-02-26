@@ -27,7 +27,7 @@
   "build": {
     "appId": "com.monitord.desktop",
     "productName": "monitord desktop",
-    "icon": "assets/icons/app.ico",
+    "icon": "assets/icons/app-512.png",
     "npmRebuild": false,
     "buildDependenciesFromSource": false,
     "directories": {
@@ -80,6 +80,7 @@
       ]
     },
     "linux": {
+      "icon": "assets/icons/app-512.png",
       "extraResources": [
         {
           "from": "../build_target/release/monitord",
@@ -93,6 +94,7 @@
       "category": "Utility"
     },
     "mac": {
+      "icon": "assets/icons/app-512.png",
       "extraResources": [
         {
           "from": "../build_target/release/monitord",
